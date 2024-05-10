@@ -14,13 +14,13 @@ function Navbar() {
   return (
     <nav
       className={`w-full ${path == "/chat" ? "flex" : "flex"
-        } flex-row bg-primary py-4  justify-between px-2 md:px-10 items-center rounded-t-md`}
+        } flex-row bg-primary py-4  justify-between px-2 md:px-10 h-fit items-center rounded-t-md`}
     >
-      <div className="lg:w-2/12 md:w-4/12 w-1/2">
-        <a href="/">
+      <div className="w-1/4 h-fit">
+        <a href="/" className="w-fit">
           <img
-            src="/images/logo_blue.png"
-            className="w-full h-[6vh] object-left object-contain  "
+            src="/images/logo.png"
+            className="h-fit w-1/2 object-left object-cover  "
             alt=""
           />
         </a>
@@ -65,7 +65,7 @@ function Navbar() {
 
       </div>
 
-      <div className="flex md:hidden">
+      <div className="flex md:hidden h-fit">
         {!userData && <Link to={'/auth'}>
           <Button className="p-0 m-0 bg-blue-50 text-blue-900" pill >
             {/* <RiMenu3Line className="text-2xl text-blue-600" /> */}

@@ -11,7 +11,7 @@ export default {
         cream: '#D1D1D6',
         ghost: '#E0E8EE',
         dull: '#303233',
-        primary: "#B9E6FF" // #4B5560 is
+        primary: "#F4F5FC" // #4B5560 is
       }
     },
   },
