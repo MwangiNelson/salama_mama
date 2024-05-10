@@ -1,0 +1,31 @@
+{
+    "conversationId": "CONVERSATION_01",
+    "convo_title": "CONVERSATION_01",
+    "convo_texts": {
+      "user1": "Please help me cope with my eating disorder",
+      "bot1": " so one side effect would be that you feel stuck eating and then that other side effect is food craving feel like you were missing for the food because it was such a favorite of hers and that",
+      "user2": "But I dont feel like eating anymore",
+      "bot2": " okay is there anything you can do to make yourself stop this so long\nit makes one hell of a lot calmer ",
+      "user3": "How do I change to be a better person?",
+      "bot3": " Hello! Thank you for your question.  This is something that has always been on my mind,  and I'm sorry you're upset because this is something you've been",
+      "user4": "How do I change to be a better person",
+      "bot4": " um okay so I'm gonna go to give you some tips and I'm gonna give one of the items for you to do is find a therapist that you really trust and that it will",
+      "user5": "Thank you for that piece of advice",
+      "bot5": "An error occurred. Please try again.",
+      "user6": "Thank you for that piece of advice",
+      "bot6": "An error occurred. Please try again."
+    }
+  ,
+    "convo_timestamp": "2024-01-08T22:03:56.655Z"
+  }
+
+
+  {
+  "conversationId": "CONVERSATION_05",
+  "convo_texts": {
+    "user7": "Thank you for that piece of advice",
+    "bot7": " so so you're kind of concerned about your health\nyeah that's true I believe that I'm healthy enough to drink and I think my stomach's kind of sensitive to some of it but so"
+  },
+  "convo_timestamp": "2024-01-08T22:11:33.701Z",
+  "convo_title": "CONVERSATION_05"
+}
