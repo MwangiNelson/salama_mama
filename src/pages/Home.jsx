@@ -1,4 +1,4 @@
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import React, { useState, useContext, useEffect } from "react";
 import { GiLawStar } from "react-icons/gi";
 import { AppContext } from "../contexts/AppContexts";
@@ -11,7 +11,9 @@ function Home() {
 
   const [motivationalText, setMotivationalText] = useState("Fetching motivational text....")
   const { userMood, userData, setUserMood } = useContext(AppContext)
+  const [loading, setLoading] = useState(false)
   async function getMotivationalText() {
+    setLoading(true)
     try {
 
       if (userMood) {
@@ -23,12 +25,15 @@ function Home() {
         });
         let data = await responses.json();
         console.log('Motivational text:', data)
-        setMotivationalText(data.messages[0].text)
+        setMotivationalText(data.messages[0]?.text)
       }
 
 
     } catch (error) {
+      setMotivationalText('Error fetching motivational text')
       console.error('Error fetching motivational text:', error);
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -55,9 +60,9 @@ function Home() {
         </div>
         {userData && <div className="w-full p-4 rounded border border-gray-300">
           <h3 className="text-xl font-bold">Motivational Quote of The day</h3>
-          <div className="flex flex-row flex-wrap w-full py-5">
+          <div className="flex gap-4 flex-row flex-wrap w-full py-5">
             <RiDoubleQuotesL className="text-pink-600" />
-            <p className="text-pink-600 w-fit">
+            <p className={`text-pink-600 w-fit ${loading && ' animate-pulse'}`}>
 
               {motivationalText}
             </p>

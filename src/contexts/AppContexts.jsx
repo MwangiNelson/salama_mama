@@ -299,6 +299,7 @@ export const AppProvider = ({ children }) => {
         auth.signOut()
         setUserData(null)
         localStorage.removeItem('userData');
+        localStorage.removeItem('userMood');
         window.location.href = '/';
     }
 
