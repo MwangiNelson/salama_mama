@@ -88,9 +88,8 @@ function Home() {
         </p>
         <div className="flex flex-row gap-4">
 
-          <Link to={'/chat'}><Button color="pink" className="w-fit px-7 bg-pink-600 text-white hover:text-pink-600 rounded-lg">Get Started</Button></Link>
+          <Link to={userData ? '/chat' :'/auth'}><Button color="pink" className="w-fit px-7 bg-pink-600 text-white hover:text-pink-600 rounded-lg">Get Started</Button></Link>
 
-          <Link to={'/'}><Button color="light" className="w-fit px-7 border rounded-lg">Learn More</Button></Link>
 
         </div>
         {userData && <div className="w-full p-4 rounded border border-gray-300">

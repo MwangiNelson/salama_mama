@@ -249,7 +249,7 @@ function Auth() {
                 </div>
 
 
-                <Button pill type="submit" color="dark" className="mt-4 lg:mt-0" >Create An Account</Button>
+                <Button pill type="submit" color="dark" className="mt-4  lg:mt-4" >Create An Account</Button>
                 <div className="flex flex-row py-4 pb-10 w-10/12 lg:w-3/4 justify-center lg:justify-between">
                     <Link to={""} onClick={toggleAuth}>Already have an account?</Link>
                 </div>

@@ -89,7 +89,7 @@ function Navbar() {
               <h3 className="!font-sans">Start Chat</h3>
             </Button>
           </Link>
-          <Tooltip content='User Preferences'>
+          <Tooltip content='User Moods'>
             <button
               onClick={() => { setOenPrefs(!openPrefs) }}
               className=" !font-sans border p-2 rounded-full" >
