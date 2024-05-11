@@ -15,9 +15,10 @@ export const AppProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [activeConvo, setActiveConvo] = useState(null)
     const [chats, setChats] = useState([])
+    const [userMood, setUserMood] = useState(null)
 
     useEffect(() => {
-        const storedUserData = sessionStorage.getItem('userData');
+        const storedUserData = localStorage.getItem('userData');
         if (storedUserData) {
             setUserData(JSON.parse(storedUserData));
         }
@@ -25,13 +26,14 @@ export const AppProvider = ({ children }) => {
 
     useEffect(() => {
         if (!userData) {
-            sessionStorage.removeItem('userData');
+            localStorage.removeItem('userData');
         }
 
-        sessionStorage.setItem('userData', JSON.stringify(userData))
+        localStorage.setItem('userData', JSON.stringify(userData))
 
 
     }, [userData]);
+
 
 
     useEffect(() => {
@@ -41,7 +43,7 @@ export const AppProvider = ({ children }) => {
     useEffect(() => {
         const handleBeforeUnload = () => {
             if (userData) {
-                sessionStorage.setItem('userData', JSON.stringify(userData));
+                localStorage.setItem('userData', JSON.stringify(userData));
             }
         };
         window.addEventListener('beforeunload', handleBeforeUnload);
@@ -50,7 +52,62 @@ export const AppProvider = ({ children }) => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [userData]);
+    //store user mood in local storage and clear it when user logs out and lasts for 24 hours
+    useEffect(() => {
+        // Get user mood from localStorage on component mount
+        const storedMood = JSON.parse(localStorage.getItem('userMood'));
+        if (storedMood) {
+            setUserMood(storedMood);
+        }
+    }, []);
 
+    useEffect(() => {
+        if (userMood) {
+            // Store user mood in localStorage
+            localStorage.setItem('userMood', JSON.stringify(userMood));
+
+            // Clear user mood from localStorage after 24 hours
+            const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            const expirationTimeout = setTimeout(() => {
+                localStorage.removeItem('userMood');
+                setUserMood(null);
+            }, expirationTime - new Date().getTime());
+
+            // Clear user mood from localStorage on logout
+            return () => {
+                clearTimeout(expirationTimeout);
+                localStorage.removeItem('userMood');
+                setUserMood(null);
+            };
+        }
+    }, [userMood]);
+
+    async function storeDailyUserMood(mood) {
+
+        const userId = userData.uid;
+        const timestamp = new Date().getTime();
+        try {
+            const userMoodRef = doc(db, "userMoods", userId);
+            const userMoodSnapshot = await getDoc(userMoodRef);
+            let userData = {};
+
+            if (userMoodSnapshot.exists()) {
+                userData = userMoodSnapshot.data();
+            }
+
+            // Initialize an array to store chats if it doesn't exist
+            userData.moods = userData.moods || [];
+
+            // Add the new chat to the array
+            userData.moods.push({ mood: mood, date: timestamp });
+
+            await setDoc(userMoodRef, userData);
+        } catch (error) {
+            console.error(error)
+
+        }
+
+    }
     async function signup(email, password, username) {
 
         try {
@@ -136,6 +193,7 @@ export const AppProvider = ({ children }) => {
         }
     }
 
+
     async function promptBot(prompt) {
         const headers = {
             "Content-Type": "application/json"
@@ -207,6 +265,8 @@ export const AppProvider = ({ children }) => {
             console.error(error);
         }
     };
+
+
     const saveConvo = async (data) => {
         let API_ENDPOINT = 'http://127.0.0.1:8000/api/add_convo'
         try {
@@ -236,7 +296,7 @@ export const AppProvider = ({ children }) => {
     const logout = () => {
         auth.signOut()
         setUserData(null)
-        sessionStorage.removeItem('userData');
+        localStorage.removeItem('userData');
         window.location.href = '/';
     }
 
@@ -251,6 +311,8 @@ export const AppProvider = ({ children }) => {
         saveConvo,
         saveChat,
         chats,
+        userMood,
+        setUserMood,
         getChatsForUser
 
     };

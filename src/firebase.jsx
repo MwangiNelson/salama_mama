@@ -4,13 +4,23 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBdXbpPG0WBalth0DBpAApdXYuKf7NE_NM",
-  authDomain: "frontida-5d700.firebaseapp.com",
-  projectId: "frontida-5d700",
-  storageBucket: "frontida-5d700.appspot.com",
-  messagingSenderId: "124891561863",
-  appId: "1:124891561863:web:451a2f14a14f9161025d22"
+
+  apiKey: "AIzaSyA_5yH65yQdmne621exPacr-Re_1ZinMjI",
+
+  authDomain: "salama-mama.firebaseapp.com",
+
+  projectId: "salama-mama",
+
+  storageBucket: "salama-mama.appspot.com",
+
+  messagingSenderId: "808011176101",
+
+  appId: "1:808011176101:web:ccd00314abd2358fed954c",
+
+  measurementId: "G-BZ92HJEBSW"
+
 };
+
 
 
 // Initialize Firebase
