@@ -58,7 +58,7 @@ const Feed = () => {
                                 <div className="grid grid-cols-1 pt-4 gap-4  h-full">
                                     {feed.activities.map((activity, index) => (
                                         <div className="w-full flex flex-row h-full rounded ">
-                                            <img src={activity.image_url} className='rounded-r-lg w-1/4 h-full' alt="" />
+                                            <img src={activity.image_url} className='rounded-r-lg w-1/4 h-[30vh]' alt="" />
                                             <div className="h-full w-full p-6 gap-4 rounded-b bg-white items-start flex flex-col">
                                                 <h3 className='text-lg font-bold'>{activity.title}</h3>
                                                 <p className='text-gray-500 pb-2'>{activity.benefit}</p>
@@ -79,7 +79,7 @@ const Feed = () => {
                                 <div className="grid grid-cols-1 pt-4 gap-4  h-full">
                                     {feed.articles.map((article, index) => (
                                         <div className="w-full flex flex-row h-full rounded ">
-                                            <img src={article.image_url} className='rounded-r-lg w-1/4 h-full' alt="" />
+                                            <img src={article.image_url} className='rounded-l-lg w-1/4 h-[30vh] bg-slate-200 animate-pulse' alt="" />
                                             <div className="h-full w-full p-6 gap-4 rounded-b bg-white items-start flex flex-col">
                                                 <h3 className='text-xl font-bold'>{article.title}</h3>
                                                 <p className='text-gray-500 pb-2'>{article.benefit}</p>
@@ -103,7 +103,7 @@ const Feed = () => {
                                 <div className="grid grid-cols-1 pt-4 gap-4  h-full">
                                     {feed.informative_material.map((article, index) => (
                                         <div className="w-full flex flex-row h-full rounded ">
-                                            <img src={article.image_url} className='rounded-r-lg w-1/4 h-full' alt="" />
+                                            <img src={article.image_url} className='rounded-r-lg w-1/4 h-[30vh]' alt="" />
                                             <div className="h-full w-full p-6 gap-4 rounded-b bg-white items-start flex flex-col">
                                                 <h3 className='text-xl font-bold'>{article.title}</h3>
                                                 <p className='text-gray-500 pb-2'>{article.benefit}</p>
