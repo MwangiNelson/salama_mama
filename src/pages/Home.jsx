@@ -53,7 +53,7 @@ function Home() {
           <Link to={'/'}><Button color="light" className="w-fit px-7 border rounded-lg">Learn More</Button></Link>
 
         </div>
-        <div className="w-full p-4 rounded border border-gray-300">
+        {userData && <div className="w-full p-4 rounded border border-gray-300">
           <h3 className="text-xl font-bold">Motivational Quote of The day</h3>
           <div className="flex flex-row flex-wrap w-full py-5">
             <RiDoubleQuotesL className="text-pink-600" />
@@ -64,7 +64,7 @@ function Home() {
             <RiDoubleQuotesR className="text-pink-600" />
           </div>
           <h5 className="text-end w-full text-blue-400 hover:text-blue-600">BROUGHT TO YOU BY GEMINI</h5>
-        </div>
+        </div>}
 
       </div>
       <div className="w-full md:w-1/2 flex items-center justify-center">
