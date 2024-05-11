@@ -2,14 +2,17 @@ import { Button, Spinner } from "flowbite-react";
 import React, { useState, useContext, useEffect } from "react";
 import { GiLawStar } from "react-icons/gi";
 import { AppContext } from "../contexts/AppContexts";
-import { MdStar } from "react-icons/md";
-import { RiArrowRightUpLine, RiDoubleQuotesL, RiDoubleQuotesR, RiQuoteText } from "react-icons/ri";
+import { MdArrowRight, MdStar } from "react-icons/md";
+import { RiArrowLeftLine, RiArrowRightLine, RiArrowRightUpLine, RiDoubleQuotesL, RiDoubleQuotesR, RiQuoteText } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { set } from "firebase/database";
 
 function Home() {
 
   const [motivationalText, setMotivationalText] = useState("Fetching motivational text....")
+  const [motivationsList, setMotivationsList] = useState([])
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const { userMood, userData, setUserMood } = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   async function getMotivationalText() {
@@ -25,6 +28,7 @@ function Home() {
         });
         let data = await responses.json();
         console.log('Motivational text:', data)
+        setMotivationsList(data.messages)
         setMotivationalText(data.messages[0]?.message)
       }
 
@@ -37,10 +41,41 @@ function Home() {
     }
   }
 
+  function nextMotivationalText() {
+    if (motivationsList.length === 0) {
+      return;
+    }
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      if (nextIndex >= motivationsList.length) {
+        return 0; // Wrap around to the beginning of the list
+      }
+      return nextIndex;
+    });
+  }
+  function prevMotivationalText() {
+    if (motivationsList.length === 0) {
+      return;
+    }
+    setCurrentIndex((prevIndex) => {
+      const newprevIndex = prevIndex - 1;
+      if (newprevIndex < 0) {
+        return motivationsList.length - 1; // Wrap around to the end of the list
+      }
+      return newprevIndex;
+    });
+  }
+
   useEffect(() => {
     getMotivationalText()
   }
     , [userMood])
+
+  useEffect(() => {
+    if (motivationsList.length > 0) {
+      setMotivationalText(motivationsList[currentIndex]?.message);
+    }
+  }, [motivationsList, currentIndex]);
 
   return (
     <section className="flex flex-col md:flex-row w-10/12 bg-[#F4F5FC] h-full items-center justify-center gap-10 md:gap-0 ">
@@ -67,6 +102,15 @@ function Home() {
               {motivationalText}
             </p>
             <RiDoubleQuotesR className="text-pink-600" />
+          </div>
+
+          <div className="flex flex-row gap-3">
+            <button onClick={prevMotivationalText} disabled={loading} className="rounded-full border p-2 w-fit hover:bg-pink-200/40">
+              <RiArrowLeftLine className="text-pink-900" />
+            </button>
+            <button onClick={nextMotivationalText} disabled={loading} className="rounded-full border p-2 w-fit hover:bg-pink-200/40">
+              <RiArrowRightLine className="text-pink-900" />
+            </button>
           </div>
           <h5 className="text-end w-full text-blue-400 hover:text-blue-600">BROUGHT TO YOU BY GEMINI</h5>
         </div>}
