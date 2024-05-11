@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { AppContext } from "../contexts/AppContexts";
 import { Avatar, AvatarGroupCounter, Badge, Button, TextInput, Tooltip, Spinner, Modal, Label } from "flowbite-react";
 import { MdArrowBackIos, MdArrowForwardIos, MdArrowRight, MdArrowRightAlt, MdChatBubble, MdChatBubbleOutline, MdEmojiPeople, MdHistory, MdInfo, MdVerticalSplit } from "react-icons/md";
-import { GiChatBubble, GiHandGrip, GiInfo, GiPencil, GiPencilBrush, GiQuill, GiTrashCan } from "react-icons/gi";
+import { GiChatBubble, GiHandGrip, GiInfo, GiPencil, GiPencilBrush, GiQuill, GiSave, GiTrashCan } from "react-icons/gi";
 import { RiArrowRightLine, RiChatQuoteFill, RiExternalLinkLine, RiPencilFill, RiQuillPenFill, RiRobot2Fill, RiWomenFill } from "react-icons/ri";
 
 
@@ -69,36 +69,36 @@ function Chat() {
         setLoading(true);
         console.log(data.userPrompt);
         setUnsavedData(true);
-      
+
         try {
-          const responseString = await promptBot(data.userPrompt);
-          const response = JSON.parse(responseString);
-          console.log("Bot Response:", response);
-      
-          setConversation(prevConvo => [
-            ...prevConvo,
-            {
-              user: data.userPrompt,
-              bot: {
-                text: response.response,
-                additionalInfo: response.additional_info,
-                emotionAddressed: response.emotion_addressed,
-                toneUsed: response.tone_used,
-              },
-            },
-          ]);
-      
+            const responseString = await promptBot(data.userPrompt);
+            const response = JSON.parse(responseString);
+            console.log("Bot Response:", response);
+
+            setConversation(prevConvo => [
+                ...prevConvo,
+                {
+                    user: data.userPrompt,
+                    bot: {
+                        text: response.response,
+                        additionalInfo: response.additional_info,
+                        emotionAddressed: response.emotion_addressed,
+                        toneUsed: response.tone_used,
+                    },
+                },
+            ]);
+
         } catch (error) {
-          console.error("Error handling prompt:", error);
-          // Handle error appropriately, e.g., show error message to user
-          setConversation(prevConvo => [
-            ...prevConvo,
-            { user: data.userPrompt, bot: { text: `Error: ${error.message}`, links: '' } },
-          ]);
+            console.error("Error handling prompt:", error);
+            // Handle error appropriately, e.g., show error message to user
+            setConversation(prevConvo => [
+                ...prevConvo,
+                { user: data.userPrompt, bot: { text: `Error: ${error.message}`, links: '' } },
+            ]);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
+    };
 
     const displayOldChat = (chat) => {
         if (conversation.length == 0) {
@@ -155,7 +155,7 @@ function Chat() {
                     <Avatar rounded size={'md'} img={'/images/Bubble.jpeg'} className="object-contain" />
                     <div className="flex flex-col w-full max-w-[320px] leading-1.5 p-4 bg-blue-300 rounded-e-xl rounded-es-xl dark:bg-gray-700">
                         <div className="flex items-center justify-between space-x-2 rtl:space-x-reverse">
-                            <span className="text-sm font-semibold text-gray-700 dark:text-white">Frontida BOT</span>
+                            <span className="text-sm font-semibold text-gray-700 dark:text-white">SM BOT</span>
                             <MdInfo className="text-white" />
                         </div>
                         <p className="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{text}</p>
@@ -290,7 +290,7 @@ function Chat() {
                     <MdInfo className="mx-auto mb-4 h-14 w-14 bg-gray-400 rounded-full p-0 text-white" />
                     <h3>You have unsaved changes. Would you like to save them before opening an old chat?</h3>
                     <div className="flex flex-row w-full justify-center gap-2">
-                        <Button color="blue">Save Chat</Button>
+                        <Button color="blue" >Save Chat</Button>
                         <Button color="red">I don't wish to save  the chat</Button>
                     </div>
                 </Modal.Body>
@@ -374,8 +374,8 @@ function Chat() {
                         <Button size={'lg'} className={!openSideNav ? "py-2" : 'w-fit'} color="gray" pill onClick={() => (setOpenSideNav(!openSideNav))} > {openSideNav ? <MdArrowBackIos /> : <MdArrowForwardIos />} {openSideNav && "Collapse"}</Button>
                         <Button
                             size={'lg'}
-                            className={!openSideNav ? "py-2" : 'w-fit'}
-                            color="dark" pill={!openSideNav}
+                            className={!openSideNav ? "py-2 bg-pink-500" : 'w-fit bg-pink-500'}
+                            color="pink" pill={!openSideNav}
                             onClick={() => {
                                 if (unsavedData) {
                                     setOpenModal(true)
@@ -412,7 +412,7 @@ function Chat() {
                             <div className="flex flex-row gap-3">
                                 <Avatar rounded size={'md'} img={'/images/Bubble.jpeg'} status="online" statusPosition="top-right" />
                                 <div className="hidden md:flex flex-col">
-                                    <h3 className="text-xl font-bold">Frontida Bot</h3>
+                                    <h3 className="text-xl font-bold">SM BOT</h3>
                                     <Badge className="w-fit">Online</Badge>
                                 </div>
                             </div>
@@ -425,9 +425,14 @@ function Chat() {
                                         }
                                         else { setConversation([]) }
                                     }}
-                                    className="m-0 p-0 flex lg:hidden" pill color="dark"><h4 className="hidden md:flex">New</h4><GiChatBubble className="m-0 md:ms-2" /> </Button>
+                                    className="m-0 p-0 flex lg:hidden" pill color="pink"><h4 className="hidden md:flex">New</h4><GiChatBubble className="m-0 md:ms-2" /> </Button>
 
-
+                                <Button pill color="blue" onClick={() => {
+                                    if (unsavedData) {
+                                        setOpenModal(true)
+                                    }
+                                    else { setConversation([]) }
+                                }}><GiSave className="me-4" /> Save Chat</Button>
                                 <Button
                                     onClick={() => setHistoryModal(true)}
                                     className="m-0 p-0 flex lg:hidden" pill color="light"><h4 className="hidden md:flex">History</h4><MdHistory className="m-0 md:ms-2" /> </Button>
@@ -474,7 +479,7 @@ function Chat() {
                                             className="w-full"
                                             color={errors.userPrompt ? 'warning' : 'gray'}
                                             helperText={errors.userPrompt?.message}
-                                            onSubmit={() => { console.log('submitted')}}
+                                            onSubmit={() => { console.log('submitted') }}
                                         />
                                     </div>
                                     <Button color="purple" type="submit" className="py-0 h-fit" >Send <RiArrowRightLine className="ms-2 text-sm md:text-2xl" /></Button>

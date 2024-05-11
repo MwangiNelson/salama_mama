@@ -7,8 +7,12 @@ import MoodModal from "./components/MoodModal";
 import { useContext, useEffect } from "react";
 import { AppContext } from "./contexts/AppContexts";
 
+
 function App() {
   const { userMood, userData, setUserMood } = useContext(AppContext)
+
+
+
 
 
   return (
@@ -19,7 +23,7 @@ function App() {
         <Navbar />
         <ToastContainer />
         <Navigation />
-        <MoodModal visible={userMood == null && userData} />
+        <MoodModal visible={userMood === null && userData} />
         <Footer />
       </section>
     </div>

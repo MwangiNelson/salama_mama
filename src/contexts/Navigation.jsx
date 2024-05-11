@@ -5,13 +5,14 @@ import Auth from "../pages/Auth";
 import { useContext } from "react";
 import { AppContext } from "./AppContexts";
 import CustomToast from "../components/toast";
+import Feed from "../pages/Feed";
 
 function Navigation() {
   const { userData } = useContext(AppContext);
 
   // Create a Protected Route Component
   const ProtectedRoute = ({ children }) => {
-    
+
     return userData ? children : <Navigate to="/auth" />;
   };
 
@@ -20,8 +21,9 @@ function Navigation() {
       <Route path="/" element={<Home />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/shatt" element={<Chat />} />
-  
-      <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+      <Route path='/feed' element={<Feed />} />
+
+      <Route path="/chat" element={<Chat />} />
     </Routes>
   );
 }
