@@ -149,6 +149,46 @@ function Chat() {
     // console.log(userData.username)
 
     const BotCard = ({ text, links }) => {
+
+        const [audioUrl, setAudioUrl] = useState('');
+        const currentTextRef = useRef(text); // Ref to track the current text
+
+        useEffect(() => {
+            // Reset audio URL when text changes
+            setAudioUrl('');
+        }, [text]);
+
+        const fetchAudio = async () => {
+            const controller = new AbortController(); // Create a new AbortController
+            currentTextRef.current = text; // Update current text ref to the latest text
+
+            try {
+                const formData = new FormData();
+                formData.append('text', text);
+
+                const response = await fetch('https://mama-salama.onrender.com/speech', {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal // Pass the abort signal to fetch
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (text === currentTextRef.current) { // Check if the response matches the current text
+                        setAudioUrl(data.speech_url);
+                    }
+                } else {
+                    console.error('Failed to fetch audio');
+                }
+            } catch (error) {
+                if (!controller.signal.aborted) {
+                    console.error('Error fetching audio:', error);
+                }
+            }
+
+            return () => controller.abort(); // Cleanup function to abort fetch on unmount or text change
+        };
+
         return (
             <div className="flex flex-col w-full">
                 <div className="flex flex-row items-start gap-2 w-full my-3">
@@ -160,6 +200,8 @@ function Chat() {
                         </div>
                         <p className="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{text}</p>
                         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Responded</span>
+                        {!audioUrl && <button onClick={fetchAudio} className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Play Response</button>}
+                        {audioUrl && <audio controls src={audioUrl}></audio>}
                     </div>
                 </div>
                 {links && <div className="flex flex-col w-full md:w-3/4 lg:w-1/2 ps-0 md:ps-12 gap-1 md:gap-4">
