@@ -1,9 +1,42 @@
 import { Button } from "flowbite-react";
-import React from "react";
-import { RiArrowRightUpLine } from "react-icons/ri";
+import React, { useState, useContext, useEffect } from "react";
+import { GiLawStar } from "react-icons/gi";
+import { AppContext } from "../contexts/AppContexts";
+import { MdStar } from "react-icons/md";
+import { RiArrowRightUpLine, RiDoubleQuotesL, RiDoubleQuotesR, RiQuoteText } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { set } from "firebase/database";
 
 function Home() {
+
+  const [motivationalText, setMotivationalText] = useState("Fetching motivational text....")
+  const { userMood, userData, setUserMood } = useContext(AppContext)
+  async function getMotivationalText() {
+    try {
+
+      if (userMood) {
+        let formData = new FormData();
+        formData.append('mood', userMood);
+        let responses = await fetch('https://mama-salama.onrender.com/gen/motivation', {
+          method: 'POST',
+          body: formData
+        });
+        let data = await responses.json();
+        console.log('Motivational text:', data)
+        setMotivationalText(data.messages[0].text)
+      }
+
+
+    } catch (error) {
+      console.error('Error fetching motivational text:', error);
+    }
+  }
+
+  useEffect(() => {
+    getMotivationalText()
+  }
+    , [userMood])
+
   return (
     <section className="flex flex-col md:flex-row w-10/12 bg-[#F4F5FC] h-full items-center justify-center gap-10 md:gap-0 ">
       <div className="flex flex-col items-center md:items-start gap-10 w-11/12 md:w-1/2 pt-10 md:pt-0">
@@ -16,9 +49,21 @@ function Home() {
         <div className="flex flex-row gap-4">
 
           <Link to={'/chat'}><Button color="pink" className="w-fit px-7 bg-pink-600 text-white hover:text-pink-600 rounded-lg">Get Started</Button></Link>
- 
+
           <Link to={'/'}><Button color="light" className="w-fit px-7 border rounded-lg">Learn More</Button></Link>
 
+        </div>
+        <div className="w-full p-4 rounded border border-gray-300">
+          <h3 className="text-xl font-bold">Motivational Quote of The day</h3>
+          <div className="flex flex-row flex-wrap w-full py-5">
+            <RiDoubleQuotesL className="text-pink-600" />
+            <p className="text-pink-600 w-fit">
+
+              {motivationalText}
+            </p>
+            <RiDoubleQuotesR className="text-pink-600" />
+          </div>
+          <h5 className="text-end w-full text-blue-400 hover:text-blue-600">BROUGHT TO YOU BY GEMINI</h5>
         </div>
 
       </div>
