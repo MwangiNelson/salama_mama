@@ -59,7 +59,7 @@ const Feed = () => {
                                     {feed.activities.map((activity, index) => (
                                         <div className="w-full flex flex-row h-full rounded ">
                                             <img src={activity.image_url} className='rounded-r-lg w-1/4 h-full' alt="" />
-                                            <div className="h-full w-full p-4 rounded-b bg-white items-start flex flex-col">
+                                            <div className="h-full w-full p-6 gap-4 rounded-b bg-white items-start flex flex-col">
                                                 <h3 className='text-lg font-bold'>{activity.title}</h3>
                                                 <p className='text-gray-500 pb-2'>{activity.benefit}</p>
                                                 <p className='w-fit text-sm font-semibold'>{activity.description}</p>
@@ -80,13 +80,37 @@ const Feed = () => {
                                     {feed.articles.map((article, index) => (
                                         <div className="w-full flex flex-row h-full rounded ">
                                             <img src={article.image_url} className='rounded-r-lg w-1/4 h-full' alt="" />
-                                            <div className="h-full w-full p-4 rounded-b bg-white items-start flex flex-col">
-                                                <h3 className='text-lg font-bold'>{article.title}</h3>
+                                            <div className="h-full w-full p-6 gap-4 rounded-b bg-white items-start flex flex-col">
+                                                <h3 className='text-xl font-bold'>{article.title}</h3>
                                                 <p className='text-gray-500 pb-2'>{article.benefit}</p>
                                                 <p className='w-fit text-sm font-semibold'>{article.description}</p>
-                                                <Link target='_blank' to={article.detailed_info}>
+                                                <a target='_blank' to={article.detailed_info}>
                                                     <Button>View MOre</Button>
-                                                </Link>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                </div>
+
+                            </div>
+                        )}
+                        {feed.informative_material && (
+                            <div className='w-full flex flex-col'>
+                                <h3 className="text-2xl font-bold mb-4">Informative Material</h3>
+
+
+                                <div className="grid grid-cols-1 pt-4 gap-4  h-full">
+                                    {feed.informative_material.map((article, index) => (
+                                        <div className="w-full flex flex-row h-full rounded ">
+                                            <img src={article.image_url} className='rounded-r-lg w-1/4 h-full' alt="" />
+                                            <div className="h-full w-full p-6 gap-4 rounded-b bg-white items-start flex flex-col">
+                                                <h3 className='text-xl font-bold'>{article.title}</h3>
+                                                <p className='text-gray-500 pb-2'>{article.benefit}</p>
+                                                <p className='w-fit text-sm font-semibold'>{article.description}</p>
+                                                <p className="text-md">
+                                                    {article.detailed_info}
+                                                </p>
                                             </div>
                                         </div>
                                     ))}

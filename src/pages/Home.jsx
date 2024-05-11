@@ -25,7 +25,7 @@ function Home() {
         });
         let data = await responses.json();
         console.log('Motivational text:', data)
-        setMotivationalText(data.messages[0]?.text)
+        setMotivationalText(data.messages[0]?.message)
       }
 
 
