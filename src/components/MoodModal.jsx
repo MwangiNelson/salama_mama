@@ -7,7 +7,7 @@ import CustomToast from './toast'
 const MoodModal = ({ visible, toggleFunction
 }) => {
     const { userMood, setUserMood } = useContext(AppContext)
-    const [selectedMood, setSelectedMood] = useState([])
+    const [selectedMood, setSelectedMood] = useState(null)
     const moodsWithEmojis = [
         { mood: 'Happy', emoji: '😊' },
         { mood: 'Sad', emoji: '😢' },
@@ -20,7 +20,7 @@ const MoodModal = ({ visible, toggleFunction
     const MoodCard = ({ mood, emoji }) => {
         return (
             <button
-                className={`flex flex-col items-center justify-center p-4 rounded-lg ${selectedMood.includes(mood)
+                className={`flex flex-col items-center justify-center p-4 rounded-lg ${selectedMood == mood
                     ? 'bg-green-300 text-slate-500 border-primary border-2'
                     : 'bg-gray-200 text-black'
                     }`}
@@ -32,11 +32,11 @@ const MoodModal = ({ visible, toggleFunction
         );
     };
     const handleMoodSelection = (mood) => {
-        if (selectedMood.includes(mood)) {
-            setSelectedMood(moods => moods.filter(m => m !== mood))
+        if (selectedMood == mood) {
+            setSelectedMood(null)
             return
         }
-        setSelectedMood(moods => [...moods, mood])
+        setSelectedMood(mood)
         toggleFunction()
     }
 

@@ -67,24 +67,38 @@ function Chat() {
 
     const handlePrompt = async (data, resetForm) => {
         setLoading(true);
-        console.log(data.userPrompt)
-        setUnsavedData(true)
-
+        console.log(data.userPrompt);
+        setUnsavedData(true);
+      
         try {
-            const response = await promptBot({ text: data.userPrompt });
-            const botResponse = await response.json();
-
-            console.log("Bot Response:", botResponse);
-
-            setConversation(prevConvo => [...prevConvo, { user: data.userPrompt, bot: { text: botResponse.generated_text[0].generated_text, links: botResponse.youtubeLink } }]);
-            resetForm();
+          const responseString = await promptBot(data.userPrompt);
+          const response = JSON.parse(responseString);
+          console.log("Bot Response:", response);
+      
+          setConversation(prevConvo => [
+            ...prevConvo,
+            {
+              user: data.userPrompt,
+              bot: {
+                text: response.response,
+                additionalInfo: response.additional_info,
+                emotionAddressed: response.emotion_addressed,
+                toneUsed: response.tone_used,
+              },
+            },
+          ]);
+      
         } catch (error) {
-            console.error("Error handling prompt:", error);
-            // Handle error appropriately, e.g., show error message to user
+          console.error("Error handling prompt:", error);
+          // Handle error appropriately, e.g., show error message to user
+          setConversation(prevConvo => [
+            ...prevConvo,
+            { user: data.userPrompt, bot: { text: `Error: ${error.message}`, links: '' } },
+          ]);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
 
     const displayOldChat = (chat) => {
         if (conversation.length == 0) {
@@ -460,6 +474,7 @@ function Chat() {
                                             className="w-full"
                                             color={errors.userPrompt ? 'warning' : 'gray'}
                                             helperText={errors.userPrompt?.message}
+                                            onSubmit={() => { console.log('submitted')}}
                                         />
                                     </div>
                                     <Button color="purple" type="submit" className="py-0 h-fit" >Send <RiArrowRightLine className="ms-2 text-sm md:text-2xl" /></Button>

@@ -7,7 +7,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { toast } from 'react-toastify';
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const BOT_ENDPOINT = 'https://frontida-apis.onrender.com/generateText'
+const BOT_ENDPOINT = 'https://mama-salama.onrender.com/chat/response'
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -193,29 +193,31 @@ export const AppProvider = ({ children }) => {
         }
     }
 
-
     async function promptBot(prompt) {
-        const headers = {
-            "Content-Type": "application/json"
-        };
-        console.log("Sent Data : ", prompt)
+        console.log("Sent Data : ", prompt);
+
+        const formData = new FormData();
+        formData.append('chat-text', prompt);
+        formData.append('mood', userMood);
+
+        console.log("Form Data : ", formData);
 
         // Configure the fetch options for POST request with CORS enabled
         const requestOptions = {
             method: "POST",
-            headers: headers,
-            body: JSON.stringify(prompt)
+            body: formData
         };
 
         try {
-            let botResponse = await fetch(BOT_ENDPOINT, requestOptions);
+            const botResponse = await fetch(BOT_ENDPOINT, requestOptions);
             if (!botResponse.ok) {
                 // If the response status is not ok, throw an error
-                return ({ generated_text: 'I am sorry, I am unable to process a response at the moment, please try again in a few minutes.' });
-
+                return { response: 'I am sorry, I am unable to process a response at the moment, please try again in a few minutes.' };
             }
 
-            return botResponse; // Assuming the response is text
+            // Assuming the response is text
+            const responseText = await botResponse.text();
+            return responseText;
         } catch (err) {
             // Return the error message as a string
             console.error("Error fetching response from bot:", err);
