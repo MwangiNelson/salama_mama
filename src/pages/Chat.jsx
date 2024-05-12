@@ -7,6 +7,8 @@ import { Avatar, AvatarGroupCounter, Badge, Button, TextInput, Tooltip, Spinner,
 import { MdArrowBackIos, MdArrowForwardIos, MdArrowRight, MdArrowRightAlt, MdChatBubble, MdChatBubbleOutline, MdEmojiPeople, MdHistory, MdInfo, MdVerticalSplit } from "react-icons/md";
 import { GiChatBubble, GiHandGrip, GiInfo, GiPencil, GiPencilBrush, GiQuill, GiSave, GiTrashCan } from "react-icons/gi";
 import { RiArrowRightLine, RiChatQuoteFill, RiExternalLinkLine, RiPencilFill, RiQuillPenFill, RiRobot2Fill, RiWomenFill } from "react-icons/ri";
+import { prefs } from "./datas";
+import { loadBundle } from "firebase/firestore";
 
 
 const Emotions = [
@@ -46,6 +48,9 @@ function Chat() {
     const [savePrompt, setSavePrompt] = useState(false)
     const [saving, setSaving] = useState(false)
     const [historyModal, setHistoryModal] = useState(false)
+    const [storySuggesttions, setStorySuggestions] = useState([])
+    const [selectedStory, setSelectedStory] = useState(null)
+    const [loadingStory, setLoadingStory] = useState(false)
 
     const { userData, logout, chats, promptBot, saveChat, getChatsForUser } = useContext(AppContext)
 
@@ -134,6 +139,33 @@ function Chat() {
         setSaving(false)
     }
 
+    const getStory = async () => {
+        setLoadingStory(true)
+        let formData = new FormData()
+        console.log('Start')
+
+        formData.append('mood', userData.mood)
+        let Preferences = prefs.sort(() => 0.5 - Math.random()).slice(0, 3)
+        formData.append('preferences', Preferences)
+        try {
+            console.log('Start try')
+
+            const response = await fetch('https://mama-salama.onrender.com/generate_story', {
+                method: 'POST',
+                body: formData
+            })
+
+            const story = await response.json()
+            console.log('Story here')
+
+            console.log('Generated story ', story)
+            setSelectedStory(story.story)
+        } catch (error) {
+            console.error('Error fetching story:', error)
+        } finally {
+            setLoadingStory(false)
+        }
+    }
 
     useEffect(() => {
         console.log("Conversation history:", conversation);
@@ -509,8 +541,46 @@ function Chat() {
                                 })
                             }
                             {loading && <BotLoading />}
+                            {
+                                conversation.length == 0 &&
+                                <div className="flex items-center justify-end flex-col h-full w-full gap-4  rounded p-4-300 ">
+                                    <div className="w-1/3 rounded  items-center flex flex-col ">
+                                        <h3 className="text-xl font-bold text-pink-700">Story Suggestions</h3>
+                                        <p className="text-pink-500">Here are some stories that may help you</p>
+                                    </div>
+                                    <div className="w-full gap-3 grid grid-cols-3">
+                                        {!loadingStory && Array.from({ length: 3 }).map((_, index) => (
+                                            <div
+                                                onClick={() => { getStory() }}
+                                                className="w-full  border border-pink-300 rounded-lg transition-all ease duration-300 hover:bg-pink-300 flex flex-col items-center justify-center py-3">
+                                                <h3 className="text-2xl font-bold">Random Story {index + 1}</h3>
+                                                <p className="text-gray-700">This is a random story</p>
+                                            </div>
+                                        ))}
+                                        {
+                                            loadingStory && Array.from({ length: 3 }).map((_, index) => (
+                                                <div
+
+                                                    className="w-full  gap-2 border border-pink-200 animate-pulse rounded-lg transition-all ease duration-300 hover:bg-pink-300 flex flex-col items-center justify-center py-3">
+                                                    <div className="w-1/2 h-7 rounded bg-slate-200"></div>
+                                                    <div className="w-3/4 h-5 bg-slate-200"></div>
+                                                </div>
+                                            ))}
+                                    </div>
+                                </div>
+                            }
 
                         </div>
+                        <Modal dismissible show={selectedStory && !loadingStory} size={'7xl'} onClose={() => { setSelectedStory(null) }}>
+                            <Modal.Header>
+                                Some Story
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>
+                                    {selectedStory}
+                                </p>
+                            </Modal.Body>
+                        </Modal>
 
                         <div className="flex flex-row h-fit w-full">
                             <form onSubmit={handleSubmit(handlePrompt, { reset: true })} className="w-full">
