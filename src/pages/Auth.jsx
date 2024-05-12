@@ -22,19 +22,23 @@ function Auth() {
     }
 
     const handleSignIn = async (data) => {
+        const email = data.email;
+        const password = data.password;
 
-            const email =  data.email
-            const password = data.password
-        
         try {
-            await login(email,password);
-            CustomToast({ type: 'success', message: 'User logged in successfully.' })
-            navigate('/');
-
+            const response = await login(email, password);
+            if (response.success) {
+                CustomToast({ type: 'success', message: 'User logged in successfully' })
+                navigate('/');
+            } else {
+                // Handle login failure
+                CustomToast({ type: 'danger', message: 'Login failed' });
+            }
         } catch (error) {
-            // Handle error (e.g., set error message)
-            CustomToast({ type: 'danger', message: 'Login Failed' });
-            setErrorMessage(error.message);
+            // Handle other errors
+            console.error("An error occurred during login: ", error.message);
+            CustomToast({ type: 'danger', message: 'An unexpected error occurred.' });
+            setErrorMessage('An unexpected error occurred.');
         }
     }
 
@@ -205,7 +209,7 @@ function Auth() {
                             placeholder="sampleemail@gmail.com"
                             icon={MdEmail}
                             color={errors.email?.message ? 'failure' : 'gray'}
-                            helperText={errors.email?.message}
+                            helperText={errors.email?.message || "You can use a dummy email if you prefer."}
                         />
                     </div>
                     <div className="flex flex-col md:flex-row gap-3 w-full md:w-3/4">
@@ -240,7 +244,7 @@ function Auth() {
                                 placeholder="Confirm Password"
                                 className='w-full'
                                 helperText={errors.confirm_password?.message}
-                                color={errors.confirm_password ? 'failure' : (watch('password') === getValues('confirm_password') ? 'success' : 'gray')}
+                                // color={errors.confirm_password ? 'failure' : (watch('password') === getValues('confirm_password') ? 'success' : 'gray')}
                             />
 
                         </div>
@@ -248,8 +252,9 @@ function Auth() {
 
                 </div>
 
-
-                <Button pill type="submit" color="dark" className="mt-4  lg:mt-4" >Create An Account</Button>
+                <div className="mt-2">
+                    <Button pill type="submit" color="dark" className="lg:mt-0" >Create An Account</Button>
+                </div>
                 <div className="flex flex-row py-4 pb-10 w-10/12 lg:w-3/4 justify-center lg:justify-between">
                     <Link to={""} onClick={toggleAuth}>Already have an account?</Link>
                 </div>
