@@ -151,16 +151,15 @@ function Chat() {
     const BotCard = ({ text, links }) => {
 
         const [audioUrl, setAudioUrl] = useState('');
-        const currentTextRef = useRef(text); // Ref to track the current text
+        const currentTextRef = useRef(text);
 
         useEffect(() => {
-            // Reset audio URL when text changes
             setAudioUrl('');
         }, [text]);
 
         const fetchAudio = async () => {
-            const controller = new AbortController(); // Create a new AbortController
-            currentTextRef.current = text; // Update current text ref to the latest text
+            const controller = new AbortController();
+            currentTextRef.current = text;
 
             try {
                 const formData = new FormData();
@@ -169,12 +168,15 @@ function Chat() {
                 const response = await fetch('https://mama-salama.onrender.com/speech', {
                     method: 'POST',
                     body: formData,
-                    signal: controller.signal // Pass the abort signal to fetch
+                    signal: controller.signal,
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate' // Add cache control headers
+                    }
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    if (text === currentTextRef.current) { // Check if the response matches the current text
+                    if (text === currentTextRef.current) {
                         setAudioUrl(data.speech_url);
                     }
                 } else {
@@ -186,8 +188,9 @@ function Chat() {
                 }
             }
 
-            return () => controller.abort(); // Cleanup function to abort fetch on unmount or text change
+            return () => controller.abort();
         };
+
 
         return (
             <div className="flex flex-col w-full">
