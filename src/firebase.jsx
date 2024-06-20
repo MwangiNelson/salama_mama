@@ -5,19 +5,19 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyA_5yH65yQdmne621exPacr-Re_1ZinMjI",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
 
-  authDomain: "salama-mama.firebaseapp.com",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
 
-  projectId: "salama-mama",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
 
-  storageBucket: "salama-mama.appspot.com",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
 
-  messagingSenderId: "808011176101",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
 
-  appId: "1:808011176101:web:ccd00314abd2358fed954c",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 
-  measurementId: "G-BZ92HJEBSW"
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 
 };
 

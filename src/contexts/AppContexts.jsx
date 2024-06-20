@@ -7,7 +7,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { toast } from 'react-toastify';
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
-const BOT_ENDPOINT = 'https://mama-salama.onrender.com/chat/response'
+const BOT_ENDPOINT = import.meta.env.VITE_BOT_ON_RENDER
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
